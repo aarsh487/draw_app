@@ -1,10 +1,10 @@
 import { Tool } from "../components/Toolbar";
 import { useShape } from "../hooks/useShape";
 
-interface Path {
-  x: number;
-  y: number;
-}
+// interface Path {
+//   x: number;
+//   y: number;
+// }
 
 type Shape =
   | {
@@ -30,11 +30,7 @@ type Shape =
     }
   | {
       type: "pencil";
-      startX: number;
-      startY: number;
-      endX: number;
-      endY: number;
-      pencilPath: Path[];
+      pencilPath: any;
     };
 
 export const useDraw = async (
@@ -55,21 +51,26 @@ export const useDraw = async (
   let clicked = false;
   let startX = 0;
   let startY = 0;
-  let pencilPath: Path[] = [];
+  let pencilPath : any = [];
 
   clearCanvas(allShapes, canvas, ctx);
 
   const onMouseDown = (e: MouseEvent) => {
     clicked = true;
-    startX = e.clientX;
-    startY = e.clientY;
+    const rect = canvas.getBoundingClientRect();
+    startX = e.clientX - rect.left;
+    startY = e.clientY - rect.top;
   };
 
   const onMouseUp = (e: MouseEvent) => {
     clicked = false;
-    const width = e.clientX - startX;
-    const height = e.clientY - startY;
+    
+
+    const rect = canvas.getBoundingClientRect();
+    const width = e.clientX - rect.left - startX;
+    const height = e.clientY - rect.top - startY;
     let shape: Shape | null = null;
+
     if (selectedTool === "rect") {
       shape = {
         type: "rect",
@@ -96,18 +97,16 @@ export const useDraw = async (
         type: "line",
         startX,
         startY,
-        endX: e.clientX,
-        endY: e.clientY,
+        endX: e.clientX - rect.left,
+        endY: e.clientY - rect.top,
       };
     } else if (selectedTool === "pencil") {
       shape = {
         type: "pencil",
-        startX,
-        startY,
-        endX: e.clientX,
-        endY: e.clientY,
         pencilPath
       };
+
+      pencilPath = [];
     }
 
     if (!shape) {
@@ -127,9 +126,10 @@ export const useDraw = async (
   };
 
   const onMouseMove = (e: MouseEvent) => {
+    const rect = canvas.getBoundingClientRect();
     if (clicked) {
-      const width = e.clientX - startX;
-      const height = e.clientY - startY;
+      const width = e.clientX - rect.left - startX;
+      const height = e.clientY - rect.top - startY;
       clearCanvas(allShapes, canvas, ctx);
       ctx.strokeStyle = "rgba(255, 255, 255)";
 
@@ -148,16 +148,21 @@ export const useDraw = async (
       } else if (selectedTool === "line") {
         ctx.beginPath();
         ctx.moveTo(startX, startY);
-        ctx.lineTo(e.clientX, e.clientY);
+        ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
         ctx.stroke();
         ctx.closePath();
       } else if(selectedTool === "pencil"){
-        pencilPath.push({ x: e.clientX, y: e.clientY })
-        ctx.beginPath();
-        ctx.moveTo(pencilPath[0].x, pencilPath[0].y)
-        for(let i = 0; i < pencilPath.length; i++){
-            
-        }
+        pencilPath.push({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+        
+          ctx.beginPath();
+
+          for(let i = 1; i < pencilPath.length; i++){
+            ctx.moveTo(pencilPath[i-1].x, pencilPath[i-1].y);
+            ctx.lineTo(pencilPath[i].x, pencilPath[i].y)
+          }
+          ctx.stroke();
+          ctx.closePath();
+        
       }
     }
   };
@@ -201,10 +206,19 @@ function clearCanvas(
       ctx.stroke();
       ctx.closePath();
     } else if (shape.type === "line") {
+      ctx.strokeStyle = "rgba(255, 255, 255)";
       ctx.beginPath();
       ctx.moveTo(shape.startX, shape.startY);
       ctx.lineTo(shape.endX, shape.endY);
-      ctx.lineWidth = 5;
+      ctx.stroke();
+      ctx.closePath();
+    } else if(shape.type === "pencil"){
+      ctx.strokeStyle = "rgba(255, 255, 255)";
+      ctx.beginPath();
+      for(let i = 1; i < shape.pencilPath.length; i++){
+        ctx.moveTo(shape.pencilPath[i - 1].x, shape.pencilPath[i - 1].y)
+        ctx.lineTo(shape.pencilPath[i].x, shape.pencilPath[i].y)
+      }
       ctx.stroke();
       ctx.closePath();
     }
