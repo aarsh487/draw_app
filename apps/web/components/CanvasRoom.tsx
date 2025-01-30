@@ -8,8 +8,8 @@ export const CanvasRoom = ({ roomId }: { roomId: string }) => {
 
   if (!socket) {
     return (
-      <div className="">
-        <h1 style={{ color: "black", textAlign: "center" }}>
+      <div className="h-screen bg-[#131312]">
+        <h1 className="text-center text-9xl">
           {" "}
           Creating Room...{" "}
         </h1>
