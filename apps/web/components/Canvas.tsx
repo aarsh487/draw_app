@@ -52,15 +52,18 @@ export const Canvas = ({
 
   return (
     <>
-      <canvas
-        ref={canvasRef}
-        width={window.innerWidth}
-        height={window.innerHeight}
-      ></canvas>
-      <Toolbar setSelectedTool={setSelectedTool} />
-      <h2 style={{ color: "black", textAlign: "center" }}>
-        selected Tool : {selectedTool}
-      </h2>
+      <div className="relative overflow-hidden">
+        <canvas
+          ref={canvasRef}
+          width={window.innerWidth}
+          height={window.innerHeight}
+          className=""
+        ></canvas>
+      </div>
+      <div className="absolute top-8 right-150 border border-black bg-[#232329] rounded-xl p-3">
+        <Toolbar selectedTool={selectedTool} setSelectedTool={setSelectedTool} />
+      </div>
+      
     </>
   );
 };
