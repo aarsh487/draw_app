@@ -34,11 +34,13 @@ export type Shape =
 
 export const useDraw =  (
   canvas: HTMLCanvasElement,
-  socket: WebSocket,
+  socket: WebSocket | null,
   roomId: string,
   selectedTool: Tool | null,
   allShapes: Shape[],
   setAllShapes: (shape: Shape) => void,
+  redo: () => void,
+  undo: () => void,
 ) => {
 
   const ctx = canvas.getContext("2d");
@@ -47,6 +49,25 @@ export const useDraw =  (
 
   if (!ctx) {
     return;
+  };
+
+  if(!socket){
+    return;
+  }
+
+  socket.onmessage = (event) => {
+    console.log("in useDraw:", event)
+    const message = JSON.parse(event.data);
+    if(message.type === "draw"){
+      const parsedShape = JSON.parse(message.message);
+      setAllShapes(parsedShape.shape);
+      clearCanvas(allShapes, canvas, ctx);
+    }
+    if(message.type === "undo"){
+      undo();
+    } else if(message.type === "redo"){
+      redo();
+    }
   }
 
   let clicked = false;
@@ -118,8 +139,9 @@ export const useDraw =  (
     setAllShapes(shape);
 
 
+
     const data = JSON.stringify({
-      type: "chat",
+      type: "draw",
       message: JSON.stringify({
         shape,
       }),

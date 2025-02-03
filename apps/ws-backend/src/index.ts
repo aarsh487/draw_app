@@ -70,10 +70,10 @@ wss.on('connection', function connection(ws, request){
             if(!user){
                 return;
             }
-            user.rooms = user.rooms.filter(x => x !== parsedData.room);
+            user.rooms = user.rooms.filter(x => x !== parsedData.roomId);
         }
 
-        if(parsedData.type === 'chat'){
+        if(parsedData.type === 'draw'){
             const roomId = parsedData.roomId;
             const message = parsedData.message;
 
@@ -87,11 +87,33 @@ wss.on('connection', function connection(ws, request){
 
             users.forEach(user => {
                 user.ws.send(JSON.stringify({
-                    type: 'chat',
+                    type: 'draw',
                     message: message,
                     roomId
                 }))
-            })
+            });
+        };
+
+        if(parsedData.type === "undo"){
+            const roomId = parsedData.roomId;
+            const message = parsedData.message;
+
+            users.forEach(user => {
+                user.ws.send(JSON.stringify({
+                    type: 'undo',
+                }))
+            });    
+        }
+
+        if(parsedData.type === "redo"){
+            const roomId = parsedData.roomId;
+            const message = parsedData.message;
+
+            users.forEach(user => {
+                user.ws.send(JSON.stringify({
+                    type: 'redo',
+                }))
+            });    
         }
     })
 })

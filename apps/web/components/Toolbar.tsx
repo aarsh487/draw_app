@@ -12,7 +12,7 @@ export enum Tool {
   Eraser = "text",
 }
 
-export const Toolbar = () => {
+export const Toolbar = ({ socket}: { socket: WebSocket}) => {
 
   const { redo, undo, setSelectedTool, selectedTool } = useShapeStore();
 
@@ -24,6 +24,26 @@ export const Toolbar = () => {
     { name: Tool.Eraser, icon: <Eraser className="size-4" /> },
   ];
 
+  const undoShape = () => {
+    undo();
+    const data = JSON.stringify({
+      type: "undo",
+    })
+    if(socket){
+      socket.send(data)
+    }
+  }
+
+  const redoShape = () => {
+    redo();
+    const data = JSON.stringify({
+      type: "redo",
+    })
+    if(socket){
+      socket.send(data)
+    }
+  }
+  
 
   return (
     <div className="flex items-center gap-4">
@@ -42,8 +62,8 @@ export const Toolbar = () => {
             <p className={twMerge("absolute inset-y-3 inset-x-4 text-[10px] text-neutral-500", selectedTool === tool.name && "text-white")}>{i+1}</p>
           </div>
         ))}
-        <button onClick={() => undo()} className="cursor-pointer"><Undo className="size-4" /></button>
-        <button onClick={() => redo()} className="cursor-pointer"><Redo className="size-4" /></button>
+        <button onClick={() => undoShape()} className="cursor-pointer"><Undo className="size-4" /></button>
+        <button onClick={() => redoShape()} className="cursor-pointer"><Redo className="size-4" /></button>
       </div>
     </div>
   );

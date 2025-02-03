@@ -1,10 +1,15 @@
 "use client";
-import React from "react";
-import { useSocket } from "../hooks/useSocket";
+import React, { useEffect } from "react";
 import { Canvas } from "./Canvas";
+import { useShapeStore } from "../store/useShapeStore";
 
 export const CanvasRoom = ({ roomId }: { roomId: string }) => {
-  const { socket } = useSocket();
+  // const { socket } = useSocket();
+  const { socket, connectSocket }  = useShapeStore();
+
+  useEffect(() => {
+    connectSocket()
+  }, [])
 
   if (!socket) {
     return (

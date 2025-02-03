@@ -6,14 +6,14 @@ import { useShapeStore } from "../store/useShapeStore";
 import { OctagonX } from "lucide-react";
 
 export const Canvas = ({
-  socket,
   roomId,
+  socket
 }: {
-  socket: WebSocket;
   roomId: string;
+  socket: WebSocket;
 }) => {
 
-  const { allShapes, getExistingShapes, setAllShapes, selectedTool } = useShapeStore();
+  const { allShapes, getExistingShapes, setAllShapes, selectedTool, redo, undo } = useShapeStore();
 
   
   const [ isClearModalOpen, setIsClearModalOpen ] = useState(false);
@@ -37,7 +37,7 @@ export const Canvas = ({
     const setUpDrawing = async () => {
       if (canvasRef.current) {
         const canvas = canvasRef.current;
-        cleanup = useDraw(canvas, socket, roomId, selectedTool, allShapes, setAllShapes  );
+        cleanup = useDraw(canvas, socket, roomId, selectedTool, allShapes, setAllShapes, redo, undo  );
       }
     };
 
@@ -46,7 +46,7 @@ export const Canvas = ({
     return () => {
       if (cleanup) cleanup();
     };
-  }, [canvasRef, selectedTool, allShapes, canvasSize]);
+  }, [canvasRef, selectedTool, allShapes, canvasSize, socket]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -85,9 +85,9 @@ export const Canvas = ({
           className=""
         ></canvas>
       </div>
-      <div className="absolute top-8 right-150 border border-black bg-[#232329] rounded-xl p-3">
+      <div className="absolute top-8 right-50 md:top-8 md:right-150 border border-black bg-[#232329] rounded-xl p-3">
         <div className="flex gap-4 items-center">
-          <Toolbar />
+          <Toolbar socket={socket} />
           <button onClick={() => setIsClearModalOpen(!isClearModalOpen)} className="cursor-pointer"><OctagonX /></button>
         </div>
       </div>

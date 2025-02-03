@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { Shape } from '../hooks/useDraw';
-import { axiosInstance } from '../config';
+import { axiosInstance, WS_URL } from '../config';
 import { Tool } from '../components/Toolbar';
 
 type Store = {
@@ -9,20 +9,22 @@ type Store = {
   currentIndex: number;
   selectedTool: Tool | null;
   isDrawing: boolean;
+  socket: WebSocket | null;
   getExistingShapes: (roomId: string) => void;
   setAllShapes: (shape: Shape) => void;
   undo: () => void;
   redo: () => void;
   setSelectedTool: (tool: Tool) => void;
+  connectSocket: () => void;
 }
 
-export const useShapeStore = create<Store>((set) => ({
+export const useShapeStore = create<Store>((set, get) => ({
   allShapes: [],
   history: [[]], 
   currentIndex: 0,
   selectedTool: null,
   isDrawing: false,
-
+  socket: null,
 
   getExistingShapes: async (roomId: string) => {
     const res = await axiosInstance.get(`/chat/${roomId}`, {
@@ -33,11 +35,11 @@ export const useShapeStore = create<Store>((set) => ({
       const data = JSON.parse(x.message);
       return data.shape;
     });
-    set(() => ({ allShapes: newShapes, history: [newShapes], currentIndex: 0 }));
+    set({ allShapes: newShapes, history: [newShapes], currentIndex: 0 });
   },
 
   setSelectedTool: ((tool: Tool) => {
-    set(() => ({ selectedTool: tool }))
+    set({ selectedTool: tool })
   }),
 
 
@@ -64,8 +66,8 @@ export const useShapeStore = create<Store>((set) => ({
       }
       return state; 
     });
+    
   },
-
 
   redo: () => {
     set((state) => {
@@ -78,4 +80,20 @@ export const useShapeStore = create<Store>((set) => ({
       return state; 
     });
   },
+
+  connectSocket: () => {
+    const client = new WebSocket(`${WS_URL}?token=${localStorage.getItem("Authorization")}`);
+        client.onopen = () => {
+          set({ socket: client });
+        };
+
+        client.onerror = (error) => {
+          console.error("WebSocket error:", error);
+        };
+      
+        client.onclose = () => {
+          console.log("WebSocket connection closed");
+          set({ socket: null });
+        };
+  }
 }));
