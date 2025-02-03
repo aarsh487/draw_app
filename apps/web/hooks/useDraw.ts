@@ -1,12 +1,11 @@
 import { Tool } from "../components/Toolbar";
-import { useShape } from "../hooks/useShape";
 
 // interface Path {
 //   x: number;
 //   y: number;
 // }
 
-type Shape =
+export type Shape =
   | {
       type: "rect";
       x: number;
@@ -33,16 +32,18 @@ type Shape =
       pencilPath: any;
     };
 
-export const useDraw = async (
+export const useDraw =  (
   canvas: HTMLCanvasElement,
   socket: WebSocket,
   roomId: string,
-  selectedTool: Tool | null
+  selectedTool: Tool | null,
+  allShapes: Shape[],
+  setAllShapes: (shape: Shape) => void,
 ) => {
-  const ctx = canvas.getContext("2d");
-  const { getExistingShapes } = useShape();
 
-  let allShapes: Shape[] = await getExistingShapes(roomId);
+  const ctx = canvas.getContext("2d");
+
+  console.log("inside useDraw:", allShapes)
 
   if (!ctx) {
     return;
@@ -52,6 +53,7 @@ export const useDraw = async (
   let startX = 0;
   let startY = 0;
   let pencilPath : any = [];
+
 
   clearCanvas(allShapes, canvas, ctx);
 
@@ -112,8 +114,9 @@ export const useDraw = async (
     if (!shape) {
       return;
     }
+   
+    setAllShapes(shape);
 
-    allShapes.push(shape);
 
     const data = JSON.stringify({
       type: "chat",
@@ -163,7 +166,7 @@ export const useDraw = async (
           ctx.stroke();
           ctx.closePath();
         
-      }
+      } 
     }
   };
 
@@ -184,14 +187,14 @@ function clearCanvas(
   ctx: CanvasRenderingContext2D
 ) {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.fillStyle = "rgba(0, 0, 0)";
+  ctx.fillStyle = "rgb(18, 18, 18)";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  allShapes.map((shape) => {
-    if (shape.type === "rect") {
+  allShapes?.map((shape) => {
+    if (shape?.type === "rect") {
       ctx.strokeStyle = "rgba(255, 255, 255)";
       ctx.strokeRect(shape.x, shape.y, shape.width, shape.height);
-    } else if (shape.type === "circle") {
+    } else if (shape?.type === "circle") {
       ctx.strokeStyle = "rgba(255, 255, 255)";
       ctx.beginPath();
       ctx.ellipse(
@@ -205,14 +208,14 @@ function clearCanvas(
       );
       ctx.stroke();
       ctx.closePath();
-    } else if (shape.type === "line") {
+    } else if (shape?.type === "line") {
       ctx.strokeStyle = "rgba(255, 255, 255)";
       ctx.beginPath();
       ctx.moveTo(shape.startX, shape.startY);
       ctx.lineTo(shape.endX, shape.endY);
       ctx.stroke();
       ctx.closePath();
-    } else if(shape.type === "pencil"){
+    } else if(shape?.type === "pencil"){
       ctx.strokeStyle = "rgba(255, 255, 255)";
       ctx.beginPath();
       for(let i = 1; i < shape.pencilPath.length; i++){

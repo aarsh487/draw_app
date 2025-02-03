@@ -70,7 +70,7 @@ wss.on('connection', function connection(ws, request){
             if(!user){
                 return;
             }
-            user.rooms.filter(x => x === parsedData.room);
+            user.rooms = user.rooms.filter(x => x !== parsedData.room);
         }
 
         if(parsedData.type === 'chat'){
