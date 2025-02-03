@@ -13,7 +13,7 @@ export const Canvas = ({
   socket: WebSocket;
 }) => {
 
-  const { allShapes, getExistingShapes, setAllShapes, selectedTool, redo, undo } = useShapeStore();
+  const { allShapes, getExistingShapes, setAllShapes, selectedTool, redo, undo, clearCanvas } = useShapeStore();
 
   
   const [ isClearModalOpen, setIsClearModalOpen ] = useState(false);
@@ -65,14 +65,8 @@ export const Canvas = ({
   }, []);
 
   const clear = () => {
-    const canvas = canvasRef.current;
-    const ctx = canvas?.getContext("2d");
-    if(ctx){
-      ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-      ctx.fillStyle = "rgb(18, 18, 18)";
-      ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
-      setIsClearModalOpen(!isClearModalOpen)
-    }
+    clearCanvas(roomId);
+    setIsClearModalOpen(!isClearModalOpen);
   }
 
   return (
@@ -85,15 +79,15 @@ export const Canvas = ({
           className=""
         ></canvas>
       </div>
-      <div className="absolute top-8 right-50 md:top-8 md:right-150 border border-black bg-[#232329] rounded-xl p-3">
+      <div className="absolute top-8 right-20 md:right-50 lg:right-150 border border-black bg-[#232329] rounded-xl p-3">
         <div className="flex gap-4 items-center">
           <Toolbar socket={socket} />
           <button onClick={() => setIsClearModalOpen(!isClearModalOpen)} className="cursor-pointer"><OctagonX /></button>
         </div>
       </div>
       {isClearModalOpen && <>
-        <div className="absolute top-62 right-120 w-[548px] h-[228px] drop-shadow-xl border border-neutral-700 bg-[#232329] rounded-xl p-8">
-          <div className=" divide-y divide-neutral-700">
+        <div className="absolute top-62 right-10 md:right-50 lg:right-120 w-[400px] h-[228px] lg:w-[548px] drop-shadow-xl border border-neutral-700 bg-[#232329] rounded-xl p-8">
+          <div className="divide-y divide-neutral-700">
             <h1 className="font-semibold text-lg pb-2">
               Clear canvas
             </h1>

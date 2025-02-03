@@ -16,6 +16,7 @@ type Store = {
   redo: () => void;
   setSelectedTool: (tool: Tool) => void;
   connectSocket: () => void;
+  clearCanvas: (roomId: string) => void;
 }
 
 export const useShapeStore = create<Store>((set, get) => ({
@@ -95,5 +96,11 @@ export const useShapeStore = create<Store>((set, get) => ({
           console.log("WebSocket connection closed");
           set({ socket: null });
         };
+  },
+
+  clearCanvas: async(roomId: string) => {
+    set({ allShapes: [] });
+    await axiosInstance.post(`/canvas/clear/${roomId}`)
+
   }
 }));

@@ -141,6 +141,22 @@ app.get('/room/:slug', authMiddleware, async(req, res) => {
         res.status(500).json({ success: false, message: "Internal server error" });
         return;
     }
+});
+
+app.post('/canvas/clear/:roomId', async(req, res) => {
+    const roomId = req.params.roomId;
+    try {
+        await prisma.chat.deleteMany({
+            where: {
+                roomId
+            }
+        });
+        res.status(200).json({ success: true, message: "canvas cleared" });
+    } catch (error) {
+        console.log("Error in clearing canvas", error);
+        res.status(500).json({ success: false, message: "Internal server error" });
+        return;
+    }
 })
 
 app.listen(5000, () => {
