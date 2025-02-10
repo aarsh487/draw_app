@@ -15,6 +15,7 @@ const users: User[] = [];
 
 const checkUser = (token: string) => {
     try {
+        console.log(token)
         const decoded = jwt.verify(token, JWT_SECRET);
         if(typeof decoded == 'string'){
             return null;

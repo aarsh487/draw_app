@@ -1,29 +1,34 @@
 "use client";
-import React, { useEffect } from "react";
+
+import { useEffect, useRef, useState } from "react";
 import { Canvas } from "./Canvas";
-import { useShapeStore } from "../store/useShapeStore";
+import { WS_URL } from "../config";
 
-export const CanvasRoom = ({ roomId }: { roomId: string }) => {
-  // const { socket } = useSocket();
-  const { socket, connectSocket }  = useShapeStore();
+export function RoomCanvas({roomId}: {roomId: string}) {
+    const [socket, setSocket] = useState<WebSocket | null>(null);
 
-  useEffect(() => {
-    connectSocket()
-  }, [])
+    useEffect(() => {
+        const ws = new WebSocket(`${WS_URL}?token=${localStorage.getItem("Authorization")}`);
 
-  if (!socket) {
-    return (
-      <div className="h-screen bg-[#131312]">
-        <h1 className="text-center text-9xl">
-          {" "}
-          Creating Room...{" "}
-        </h1>
-      </div>
-    );
-  }
-  return (
-    <>
-      <Canvas roomId={roomId} socket={socket}></Canvas>
-    </>
-  );
-};
+        ws.onopen = () => {
+            setSocket(ws);
+            const data = JSON.stringify({
+                type: "join_room",
+                roomId
+            });
+            console.log(data);
+            ws.send(data)
+        }
+        
+    }, [])
+   
+    if (!socket) {
+        return <div>
+            Connecting to server....
+        </div>
+    }
+
+    return <div>
+        <Canvas roomId={roomId} socket={socket} />
+    </div>
+}

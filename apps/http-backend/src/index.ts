@@ -72,7 +72,7 @@ app.post('/signin', async(req, res) => {
             res.status(403).json({ success: false, message: "Incorrect Password" });
             return;
         }
-
+        
         const token = jwt.sign({ user }, JWT_SECRET)
         res.status(200).json({ success: true, message: "Sign in successfull", token });
         return;

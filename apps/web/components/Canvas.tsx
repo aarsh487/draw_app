@@ -1,108 +1,60 @@
-"use client";
-import React, { useEffect, useRef, useState } from "react";
-import { Tool, Toolbar } from "./Toolbar";
-import { Shape, useDraw } from "../hooks/useDraw";
-import { useShapeStore } from "../store/useShapeStore";
-import { OctagonX } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 
-export const Canvas = ({
-  roomId,
-  socket
-}: {
-  roomId: string;
-  socket: WebSocket;
-}) => {
-
-  const { allShapes, getExistingShapes, setAllShapes, selectedTool, redo, undo, clearCanvas } = useShapeStore();
-
-  
-  const [ isClearModalOpen, setIsClearModalOpen ] = useState(false);
-  const [ canvasSize, setCanvasSize ] = useState({
-    width: window.innerWidth,
-    height: window.innerHeight
-  });
-
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+import { Circle, Pencil, RectangleHorizontalIcon } from "lucide-react";
+import { Game } from "../draw/Game";
+import { Tool } from "./Toolbar";
 
 
-  useEffect(() => {
-    const loadShapes = async() => {
-      getExistingShapes(roomId);
-    }
-    loadShapes();
-  }, [roomId]);
+export function Canvas({ roomId, socket }: { socket: WebSocket; roomId: string }) {
+    const canvasRef = useRef<HTMLCanvasElement>(null);
+    const [game, setGame] = useState<Game>();
+    const [selectedTool, setSelectedTool] = useState<Tool>(Tool.Circle);
 
-  useEffect(() => {
-    let cleanup: (() => void) | undefined;
-    const setUpDrawing = async () => {
-      if (canvasRef.current) {
-        const canvas = canvasRef.current;
-        cleanup = useDraw(canvas, socket, roomId, selectedTool, allShapes, setAllShapes, redo, undo  );
-      }
-    };
+    useEffect(() => {
+        game?.setTool(selectedTool);
+        console.log(selectedTool);
+    }, [selectedTool, game]);
 
-    setUpDrawing();
+    useEffect(() => {
+        if (!canvasRef.current) return;
 
-    return () => {
-      if (cleanup) cleanup();
-    };
-  }, [canvasRef, selectedTool, allShapes, canvasSize, socket]);
+        const g = new Game(canvasRef.current, roomId, socket);
+        setGame(g);
 
-  useEffect(() => {
-    const handleResize = () => {
-      if(canvasRef.current){
-        setCanvasSize({
-          width : window.innerWidth,
-          height : window.innerHeight
-        })
-      }
-    }
+        // Handle window resize to adjust canvas size dynamically
+        const resizeCanvas = () => {
+            if (canvasRef.current) {
+                canvasRef.current.width = window.innerWidth;
+                canvasRef.current.height = window.innerHeight;
+                g.clearCanvas();
+            }
+        };
+        
+        resizeCanvas();
+        window.addEventListener("resize", resizeCanvas);
 
-    window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    }
-  }, []);
+        return () => {
+            g.destroy();
+            window.removeEventListener("resize", resizeCanvas);
+        };
+    }, [roomId, socket]);
 
-  const clear = () => {
-    clearCanvas(roomId);
-    setIsClearModalOpen(!isClearModalOpen);
-  }
-
-  return (
-    <>
-      <div className="relative overflow-hidden">
-        <canvas
-          ref={canvasRef}
-          width={window.innerWidth}
-          height={window.innerHeight}
-          className=""
-        ></canvas>
-      </div>
-      <div className="absolute top-8 right-20 md:right-50 lg:right-150 border border-black bg-[#232329] rounded-xl p-3">
-        <div className="flex gap-4 items-center">
-          <Toolbar socket={socket} />
-          <button onClick={() => setIsClearModalOpen(!isClearModalOpen)} className="cursor-pointer"><OctagonX /></button>
+    return (
+        <div style={{ height: "100vh", overflow: "hidden" }}>
+            <canvas ref={canvasRef}></canvas>
+            <Topbar setSelectedTool={setSelectedTool} selectedTool={selectedTool} />
         </div>
-      </div>
-      {isClearModalOpen && <>
-        <div className="absolute top-62 right-10 md:right-50 lg:right-120 w-[400px] h-[228px] lg:w-[548px] drop-shadow-xl border border-neutral-700 bg-[#232329] rounded-xl p-8">
-          <div className="divide-y divide-neutral-700">
-            <h1 className="font-semibold text-lg pb-2">
-              Clear canvas
-            </h1>
-            <p className="text-md pt-6">This will clear the whole canvas. Are you sure?</p>
-          </div>
-          <div className="flex gap-2 justify-end py-4">
-            <button onClick={() => setIsClearModalOpen(!isClearModalOpen)} className="text-sm border border-neutral-700 px-6 py-3 rounded-lg cursor-pointer">
-              Cancel
-            </button>
-            <button onClick={clear} className="bg-[#FFA8A5] text-black text-sm border border-neutral-600 px-6 py-3 rounded-lg cursor-pointer">
-              Confirm
-            </button>
-          </div>
+    );
+}
+
+function Topbar({ selectedTool, setSelectedTool }: { selectedTool: Tool; setSelectedTool: (s: Tool) => void }) {
+    return (
+        <div style={{ position: "fixed", top: 10, left: 10, backgroundColor: "red" }}>
+            <div className="flex gap-2">
+                <button onClick={() => setSelectedTool(Tool.Pencil)}><Pencil /></button>
+                <button onClick={() => setSelectedTool(Tool.Rect)} ><RectangleHorizontalIcon /></button>
+                <button onClick={() => setSelectedTool(Tool.Circle)}><Circle /></button>
+            </div>
         </div>
-        </>}
-    </>
-  );
-};
+    ); 
+}
