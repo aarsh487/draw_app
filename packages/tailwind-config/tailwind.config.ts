@@ -1,15 +1,10 @@
-// tailwind.config.ts
 import type { Config } from "tailwindcss";
 
-const config: Config = {
-  content: [],
-  theme: {
-    // Your shared theme extensions
-    extend: {},
-  },
-  plugins: [
-    // Your shared plugins
-  ],
+// We want each package to be responsible for its own content.
+const config: Omit<Config, "content"> = {
+  // theme: {
+  //   extend: {},
+  // },
+  plugins: [],
 };
-
 export default config;

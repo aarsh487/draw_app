@@ -15,7 +15,6 @@ const users: User[] = [];
 
 const checkUser = (token: string) => {
     try {
-        console.log(token)
         const decoded = jwt.verify(token, JWT_SECRET);
         if(typeof decoded == 'string'){
             return null;
@@ -76,7 +75,7 @@ wss.on('connection', function connection(ws, request){
 
         if(parsedData.type === 'draw'){
             const roomId = parsedData.roomId;
-            const message = parsedData.message;
+            const message = parsedData.shape;
 
             await prisma.chat.create({
                 data: {

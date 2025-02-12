@@ -32,7 +32,7 @@ app.post('/signup', async(req, res) => {
 
         const hashedPassword = await bcrypt.hash(data.password, 10)
 
-        const newUser = await prisma.user.create({
+       await prisma.user.create({
             data: {
                 username: data.username,
                 email: data.email,

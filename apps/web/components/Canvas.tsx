@@ -1,19 +1,27 @@
 import { useEffect, useRef, useState } from "react";
 
-import { Circle, Pencil, RectangleHorizontalIcon } from "lucide-react";
 import { Game } from "../draw/Game";
-import { Tool } from "./Toolbar";
+import { Tool, Topbar } from "./Toolbar";
+import { Sidebar } from "./Sidebar";
 
 
 export function Canvas({ roomId, socket }: { socket: WebSocket; roomId: string }) {
     const canvasRef = useRef<HTMLCanvasElement>(null);
-    const [game, setGame] = useState<Game>();
     const [selectedTool, setSelectedTool] = useState<Tool>(Tool.Circle);
-
+    const [strokeStyle, setStrokeStyle] = useState("");
+    const [bgColor, setBgColor ] = useState("");
+    const [strokeWidth, setStrokeWith ] = useState(1);
+    const [game, setGame] = useState<Game>();
+    
     useEffect(() => {
         game?.setTool(selectedTool);
+        game?.setStrokestyle(strokeStyle);
+        game?.setBgColor(bgColor);
+        game?.setLineWidth(strokeWidth)
         console.log(selectedTool);
-    }, [selectedTool, game]);
+        console.log(strokeStyle);
+    }, [selectedTool, game, strokeStyle, bgColor, strokeWidth]);
+
 
     useEffect(() => {
         if (!canvasRef.current) return;
@@ -21,7 +29,7 @@ export function Canvas({ roomId, socket }: { socket: WebSocket; roomId: string }
         const g = new Game(canvasRef.current, roomId, socket);
         setGame(g);
 
-        // Handle window resize to adjust canvas size dynamically
+
         const resizeCanvas = () => {
             if (canvasRef.current) {
                 canvasRef.current.width = window.innerWidth;
@@ -40,21 +48,12 @@ export function Canvas({ roomId, socket }: { socket: WebSocket; roomId: string }
     }, [roomId, socket]);
 
     return (
-        <div style={{ height: "100vh", overflow: "hidden" }}>
+        <div className="h-screen overflow-hidden">
             <canvas ref={canvasRef}></canvas>
             <Topbar setSelectedTool={setSelectedTool} selectedTool={selectedTool} />
+            <Sidebar setBgColor={setBgColor} setStrokeStyle={setStrokeStyle} setStrokeWith={setStrokeWith} />
         </div>
     );
 }
 
-function Topbar({ selectedTool, setSelectedTool }: { selectedTool: Tool; setSelectedTool: (s: Tool) => void }) {
-    return (
-        <div style={{ position: "fixed", top: 10, left: 10, backgroundColor: "red" }}>
-            <div className="flex gap-2">
-                <button onClick={() => setSelectedTool(Tool.Pencil)}><Pencil /></button>
-                <button onClick={() => setSelectedTool(Tool.Rect)} ><RectangleHorizontalIcon /></button>
-                <button onClick={() => setSelectedTool(Tool.Circle)}><Circle /></button>
-            </div>
-        </div>
-    ); 
-}
+

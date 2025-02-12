@@ -1,16 +1,21 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
+import { Atma, Funnel_Sans, Roboto_Condensed } from "next/font/google";
 import "./globals.css";
 
-const lacquerFont = localFont({
-  src: './fonts/Lacquer-Regular.ttf',
-  variable: '--font-lacquer', // Better to name it after the actual font
-  display: 'swap', // Add for better font loading behavior
+
+export const funnel = Funnel_Sans({
+  weight: "400",
+  variable: '--font-funnel',
+  subsets: ["latin"],
+  display: "swap",
 });
-// const geistMono = localFont({
-//   src: "./fonts/GeistMonoVF.woff",
-//   variable: "--font-geist-mono",
-// });
+
+export const atma = Atma({
+  weight: "400",
+  variable: '--font-atma',
+  subsets: ["latin"],
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -23,10 +28,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${lacquerFont.variable}`}>
-        {children}
-      </body>
+    <html lang="en" className={funnel.className}>
+      <body className={`${funnel.variable}`}>{children}</body>
     </html>
   );
 }

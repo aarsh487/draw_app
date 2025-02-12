@@ -5,8 +5,16 @@ const config: Config = {
   content: ["./app/**/*.tsx"],
   presets: [sharedConfig],
   // Add these empty configs to satisfy TypeScript requirements
-  theme: {},
-  plugins: [],
+  theme: {
+    extend: {
+      container: {
+        center: true,
+      },
+      colors: {
+      },
+    },
+  },
 };
 
 export default config;
+

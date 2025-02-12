@@ -4,7 +4,7 @@ function layout({ children }:  Readonly<{
     children: React.ReactNode;
   }>) {
   return (
-    <div className=' bg-[#131312]'>
+    <div className='h-screen bg-gradient-to-tr from-slate-50 to-violet-100'>
         {children}
     </div>
   )
