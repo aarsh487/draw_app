@@ -13,7 +13,7 @@ function page() {
   ];
 
   return (
-    <div className="h-100vh bg-gradient-to-tr from-slate-50 to-violet-100">
+    <div className="h-100vh bg-gradient-to-tr from-slate-50 to-violet-50">
       <Navbar />
       <div className="pt-30 flex justify-center items-center">
         <div className="w-[800px] bg-white p-12 flex flex-col gap-8 rounded-xl">
@@ -26,8 +26,8 @@ function page() {
               type="text"
               placeholder="Enter room name"
             />
-            <Button variant="primary">
-              <Plus />
+            <Button className="inline-flex items-center gap-2 " size="lg" variant="primary">
+              <Plus size={14} /> create
             </Button>
           </div>
           <div className="text-black flex flex-col gap-6">

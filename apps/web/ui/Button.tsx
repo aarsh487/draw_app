@@ -10,7 +10,8 @@ const classes = cva(
         secondary: "border-secondary text-black bg-transparent hover:bg-secondary hover:border-primary"
       },
       size: {
-        lg: "w-full"
+        lg: "w-full",
+        sm: "w-12"
       }
     }
   } 
@@ -18,7 +19,7 @@ const classes = cva(
 
 interface ButtonProps {
   variant: "primary" | "secondary";
-  size?: "lg";
+  size?: "lg" | "sm";
   onClick?: React.MouseEventHandler<HTMLButtonElement> | undefined;
   className?: string;
   children: ReactNode;

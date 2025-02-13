@@ -1,4 +1,3 @@
-import { li } from "motion/react-client";
 import { Tool } from "../components/Toolbar";
 import { getExistingShapes } from "./http";
 
@@ -54,8 +53,8 @@ export class Game {
   private scale = 1;
   private pencilPath: any = [];
   private allShapes: Shape[] = [];
-  private strokestyle: string = '#ffffff';
-  private bgColor: string = '#000000';
+  private strokestyle: string = '#000000';
+  private bgColor: string = '#ffffff';
   private lineWidth: number = 1;
 
   constructor(canvas: HTMLCanvasElement, roomId: string, socket: WebSocket) {

@@ -21,8 +21,8 @@ export function Topbar({ selectedTool, setSelectedTool }: { selectedTool: Tool; 
 
   
   return (
-      <div className="fixed top-10 left-1/2 bg-white text-black shadow-xl border-2 border-amber-600">
-          <div className="flex gap-2 p-4">
+      <div className="fixed w-3xl top-10 left-96 bg-white text-neutral-600 shadow-xl shadow-neutral-400 rounded-2xl">
+          <div className="flex justify-around p-4">
             {tools.map((tool) => (
               <div key={tool.name}>
               <button onClick={() => setSelectedTool(tool.name)}>{tool.icon}</button>

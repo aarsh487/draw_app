@@ -24,7 +24,7 @@ export const Footer = () => {
   ];
 
   return (
-    <section className="bg-white ">
+    <section className="bg-gradient-to-tr from-slate-50 to-violet-100 ">
       <div className="container mx-auto pl-50 py-12">
         <div className="grid grid-cols-4 gap-6">
           <div className="flex flex-col gap-4">

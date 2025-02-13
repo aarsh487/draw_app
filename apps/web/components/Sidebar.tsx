@@ -22,54 +22,70 @@ export const Sidebar = ({
   ];
 
   return (
-    <div className="fixed top-8 left-20 bg-red-400">
-      <div className="flex gap-2">
-        <h1>Stroke color</h1>
-        {bgColors.map((bg) => (
-          <div key={bg.name}>
+    <div className="fixed top-40 left-4 shadow-2xl shadow-neutral-600 text-neutral-600 p-8">
+      <div className="flex flex-col gap-8">
+       <div>
+       <h1>Stroke</h1>
+        <div className="flex gap-2 items-center">
+          <button
+            onClick={() => setStrokeStyle("#ffffff")}
+            className="bg-white border border-neutral-500 h-6 w-6 rounded-md cursor-pointer"
+          ></button>
+          <button
+            onClick={() => setStrokeStyle("#121212")}
+            className="bg-black h-6 w-6 rounded-md cursor-pointer"
+          ></button>
+          <div className="border border-neutral-400 h-8"></div>
+          <input
+            type="color"
+            className="h-8 w-8 rounded-xl"
+            onChange={(e) => setStrokeStyle(e.target.value)}
+          />
+        </div>
+       </div>
+       <div>
+       <h1>Background</h1>
+        <div className="flex gap-2 items-center">
+          <button
+            onClick={() => setBgColor("#ffffff")}
+            className="bg-white border border-neutral-500 h-6 w-6 rounded-md cursor-pointer"
+          ></button>
+          <button
+            onClick={() => setBgColor("#000000")}
+            className={twMerge(
+              "bg-black border border-neutral-500 h-6 w-6 rounded-md cursor-pointer"
+            )}
+          ></button>
+          <div className="border border-neutral-400 h-8"></div>
+          <input
+            type="color"
+            className="h-8 w-8 rounded-xl"
+            onChange={(e) => setBgColor(e.target.value)}
+          />
+        </div>
+       </div>
+        <div className="">
+          <h1>Stroke Width</h1>
+          <div className="flex gap-2">
             <button
-              onClick={() => setStrokeStyle(bg.hex)}
-              className="bg-blue-900 p-4"
-            ></button>
-          </div>
-        ))}
-        <div className="border border-white"></div>
-        <input
-          type="color"
-          className="h-10"
-          onChange={(e) => setStrokeStyle(e.target.value)}
-        />
-      </div>
-
-      <div className="flex gap-2">
-        <h1>Background color</h1>
-        {bgColors.map((bg) => (
-          <div key={bg.name}>
+              className="cursor-pointer bg-primary text-white rounded-md"
+              onClick={() => setStrokeWith(1)}
+            >
+              <Minus strokeWidth={1} />
+            </button>
             <button
-              onClick={() => setBgColor(bg.hex)}
-              className="bg-blue-900 p-4"
-            ></button>
+              className="cursor-pointer bg-primary text-white rounded-md"
+              onClick={() => setStrokeWith(2.5)}
+            >
+              <Minus strokeWidth={2.5} />
+            </button>
+            <button
+              className="cursor-pointer bg-primary text-white rounded-md"
+              onClick={() => setStrokeWith(5)}
+            >
+              <Minus strokeWidth={5} />
+            </button>
           </div>
-        ))}
-        <div className="border border-white"></div>
-        <input
-          type="color"
-          className="h-10"
-          onChange={(e) => setBgColor(e.target.value)}
-        />
-      </div>
-      <div className="">
-        <h1>Stroke Width</h1>
-        <div className="flex p-4 gap-2">
-          <button className="cursor-pointer bg-blue-400" onClick={() => setStrokeWith(1)}>
-            <Minus strokeWidth={1} />
-          </button>
-          <button className="cursor-pointer bg-blue-400" onClick={() => setStrokeWith(2.5)}>
-            <Minus strokeWidth={2.5} />
-          </button>
-          <button className="cursor-pointer bg-blue-400" onClick={() => setStrokeWith(5)}>
-            <Minus strokeWidth={5} />
-          </button>
         </div>
       </div>
     </div>

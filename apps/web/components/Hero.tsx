@@ -6,7 +6,7 @@ import { atma } from '../app/layout'
 
 export const Hero = () => {
   return (
-    <section className='bg-white py-30'>
+    <section className='py-40'>
         <div className='container mx-auto'>
             <div className='flex flex-col items-center gap-8'>
                 <div className='text-xs font-bold'>
