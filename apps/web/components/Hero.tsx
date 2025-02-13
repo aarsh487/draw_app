@@ -2,7 +2,7 @@ import React from 'react'
 import { Tags } from '../ui/Tags'
 import { Button } from '../ui/Button'
 import { ArrowRight, MoveRight } from 'lucide-react'
-import { atma } from '../app/layout'
+import { atma } from '../app/fonts'
 
 export const Hero = () => {
   return (

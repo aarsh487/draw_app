@@ -2,7 +2,7 @@ import { Github, Linkedin } from "lucide-react";
 import React from "react";
 import { FaXTwitter } from "react-icons/fa6";
 import { twMerge } from "tailwind-merge";
-import { atma } from "../app/layout";
+import { atma } from "../app/fonts";
 
 export const Footer = () => {
   const produict = [

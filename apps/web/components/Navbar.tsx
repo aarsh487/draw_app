@@ -1,9 +1,9 @@
 import React from "react";
 import { Button } from "../ui/Button";
-import { atma } from "../app/layout";
 import { Menu } from "lucide-react";
 import Link from "next/link";
 import { twMerge } from "tailwind-merge";
+import { atma } from "../app/fonts";
 
 export const Navbar = () => {
   const navLinks = [
