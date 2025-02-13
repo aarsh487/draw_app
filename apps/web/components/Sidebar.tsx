@@ -22,7 +22,7 @@ export const Sidebar = ({
   ];
 
   return (
-    <div className="fixed top-40 left-4 shadow-2xl shadow-neutral-600 text-neutral-600 p-8">
+    <div className="hidden md:block fixed top-40 left-4 bg-white shadow-2xl shadow-neutral-600 text-neutral-600 p-8">
       <div className="flex flex-col gap-8">
        <div>
        <h1>Stroke</h1>

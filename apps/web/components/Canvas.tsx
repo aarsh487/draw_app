@@ -3,23 +3,31 @@ import { useEffect, useRef, useState } from "react";
 import { Game } from "../draw/Game";
 import { Tool, Topbar } from "./Toolbar";
 import { Sidebar } from "./Sidebar";
+import { deleteAllShapes } from "../draw/http";
 
 
 export function Canvas({ roomId, socket }: { socket: WebSocket; roomId: string }) {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const [selectedTool, setSelectedTool] = useState<Tool>(Tool.Circle);
-    const [strokeStyle, setStrokeStyle] = useState("");
-    const [bgColor, setBgColor ] = useState("");
+    const [strokeStyle, setStrokeStyle] = useState("#000000");
+    const [bgColor, setBgColor ] = useState("#ffffff");
     const [strokeWidth, setStrokeWith ] = useState(1);
     const [game, setGame] = useState<Game>();
+
+
+    const handleDelete = async() => {
+        const res = await deleteAllShapes(roomId);
+        if(game){
+            game.allShapes = [];
+            game.clearCanvas();
+        }
+    }
     
     useEffect(() => {
         game?.setTool(selectedTool);
         game?.setStrokestyle(strokeStyle);
         game?.setBgColor(bgColor);
         game?.setLineWidth(strokeWidth)
-        console.log(selectedTool);
-        console.log(strokeStyle);
     }, [selectedTool, game, strokeStyle, bgColor, strokeWidth]);
 
 
@@ -50,7 +58,7 @@ export function Canvas({ roomId, socket }: { socket: WebSocket; roomId: string }
     return (
         <div className="h-screen overflow-hidden">
             <canvas ref={canvasRef}></canvas>
-            <Topbar setSelectedTool={setSelectedTool} selectedTool={selectedTool} />
+            <Topbar setSelectedTool={setSelectedTool} selectedTool={selectedTool} handleDelete={handleDelete} />
             <Sidebar setBgColor={setBgColor} setStrokeStyle={setStrokeStyle} setStrokeWith={setStrokeWith} />
         </div>
     );

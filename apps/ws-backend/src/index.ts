@@ -52,6 +52,8 @@ wss.on('connection', function connection(ws, request){
         ws
     });
 
+
+
     ws.on('message', async function message(data){
         let parsedData;
         if(typeof data !== 'string'){
@@ -85,7 +87,9 @@ wss.on('connection', function connection(ws, request){
                 }
             });
 
-            users.forEach(user => {
+            const sendUser = users.filter((user) => user.userId !== userId)
+
+            sendUser.forEach(user => {
                 user.ws.send(JSON.stringify({
                     type: 'draw',
                     message: message,
@@ -98,7 +102,10 @@ wss.on('connection', function connection(ws, request){
             const roomId = parsedData.roomId;
             const message = parsedData.message;
 
-            users.forEach(user => {
+            const sendUser = users.filter((user) => user.userId !== userId)
+
+
+            sendUser.forEach(user => {
                 user.ws.send(JSON.stringify({
                     type: 'undo',
                 }))
@@ -108,8 +115,9 @@ wss.on('connection', function connection(ws, request){
         if(parsedData.type === "redo"){
             const roomId = parsedData.roomId;
             const message = parsedData.message;
+            const sendUser = users.filter((user) => user.userId !== userId)
 
-            users.forEach(user => {
+            sendUser.forEach(user => {
                 user.ws.send(JSON.stringify({
                     type: 'redo',
                 }))

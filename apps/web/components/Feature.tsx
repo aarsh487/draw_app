@@ -26,7 +26,7 @@ export const Feature = () => {
   return (
     <section className="py-30">
       <div className="container mx-auto">
-        <div className="grid grid-cols-3 items-center gap-8 px-50">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 items-center gap-8 px-25 lg:px-50">
             {cardItems.map((item) => (
                 <Card key={item.title} title={item.title} content={item.content} icon={item.icon} />
             ))}

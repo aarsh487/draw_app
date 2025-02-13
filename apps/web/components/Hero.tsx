@@ -12,10 +12,10 @@ export const Hero = () => {
                 <div className='text-xs font-bold'>
                     <Tags>Launch offer: Free for 14 days</Tags>
                 </div>
-                <div className='text-6xl text-black font-bold'>
+                <div className='text-3xl md:text-5xl lg:text-6xl text-black font-bold'>
                     <h1 className={atma.className}>Create, Collaborate, and <span className='text-primary'>Share</span> Your Art</h1>
                 </div>
-                <div className='text-lg max-w-2xl text-center text-neutral-600'>
+                <div className='text-base lg:text-lg max-w-md lg:max-w-2xl text-center text-neutral-600'>
                     <p>A powerful drawing application that brings your creativity to life. Work together in real-time, share your creations, and join a community of artists.</p>
                 </div>
                 <div className='flex gap-4'>

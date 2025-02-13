@@ -26,6 +26,7 @@ function page() {
       if (result.data.success) {
         router.push("/dashboard");
         setForm({ email: "", password: "" });
+        localStorage.setItem('authorization', result.data.token);
       } else {
         console.error("Login failed:", result.data.message);
         alert(result.data.message || "Something went wrong. Please try again.");
@@ -46,7 +47,7 @@ function page() {
   }, [form, router]);
   return (
     <div className="h-screen flex flex-col justify-center items-center">
-      <div className="max-h-96 w-[450px] bg-white rounded-xl p-10">
+      <div className="max-h-96 md:w-[450px] bg-white rounded-xl p-10">
         <div className="flex flex-col justify-center items-center gap-1 text-black">
           <h1 className={twMerge("text-2xl font-semibold ")}>
             Sign in to your account

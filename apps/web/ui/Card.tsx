@@ -19,7 +19,7 @@ export const Card = ({
   return (
     <div
       className={twMerge(
-        "h-58 bg-white border border-secondary p-6 rounded-xl",
+        "h-58 w-72 lg:max-w-md bg-white border border-secondary p-6 rounded-xl",
         className
       )}
     >
@@ -33,7 +33,7 @@ export const Card = ({
         <div className="text-black/80 text-xl font-semibold">
           <h1>{title}</h1>
         </div>
-        <div className="text-neutral-500 text-md">
+        <div className="text-neutral-500 lg:text-base text-sm">
           <p>{content}</p>
         </div>
       </div>
