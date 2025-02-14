@@ -13,22 +13,6 @@ app.use(express.json());
 app.use(cors());
 
 
-async function main() {
-  if (!process.env.DATABASE_URL) {
-    console.error("❌ DATABASE_URL is not set!");
-    process.exit(1);
-  }
-
-  console.log("✅ Running database migrations...");
-  await prisma.$executeRawUnsafe(`SELECT 1`);
-  console.log("✅ Database connected!");
-
-  await prisma.$queryRawUnsafe(`SELECT pg_advisory_lock(72707369)`);
-  console.log("✅ Prisma Migrations Complete!");
-}
-
-main().catch(console.error);
-
 app.post("/signup", async (req, res) => {
   try {
     const { data, error } = SignUpSchema.safeParse(req.body);
