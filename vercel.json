@@ -1,0 +1,32 @@
+{
+    "version": 2,
+    "builds": [
+      {
+        "src": "apps/web/package.json",
+        "use": "@vercel/next"
+      },
+      {
+        "src": "apps/http-backend/package.json",
+        "use": "@vercel/node"
+      },
+      {
+        "src": "apps/ws-backend/package.json",
+        "use": "@vercel/node"
+      }
+    ],
+    "routes": [
+      {
+        "src": "/api/(.*)",
+        "dest": "apps/http-backend/dist/index.js"
+      },
+      {
+        "src": "/ws",
+        "dest": "apps/ws-backend/dist/index.js"
+      }
+    ],
+    "env": {
+      "DATABASE_URL": "@database_url",
+      "JWT_SECRET": "@jwt_secret"
+    }
+  }
+  
