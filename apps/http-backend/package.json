@@ -7,7 +7,7 @@
     "dev": "pnpm run build && pnpm run start",
     "build": "tsc -b",
     "start": "node ./dist/index.js",
-    "postinstall": "pnpm --filter=db run migrate"
+     "postinstall": "pnpm --filter=@repo/db run migrate"
   },
   "keywords": [],
   "author": "",

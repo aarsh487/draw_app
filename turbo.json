@@ -3,7 +3,7 @@
   "ui": "tui",
   "tasks": {
     "build": {
-      "dependsOn": ["^build", "db#migrate"],
+      "dependsOn": ["^build", "@repo/db#migrate"],
       "env": [
         "JWT_SECRET",
         "DATABASE_URL"
@@ -21,20 +21,20 @@
       "cache": false,
       "persistent": true
     },
-    "generate": {
+    "@repo/db#generate": {
       "cache": false,
       "outputs": ["packages/db/prisma/generated/**"]
     },
-    "migrate": {
+    "@repo/db#migrate": {
       "cache": false,
-      "dependsOn": ["db#generate"]
+      "dependsOn": ["@repo/db#generate"]
     },
     "http-backend": {
-      "dependsOn": ["db#migrate"],
+      "dependsOn": ["@repo/db#migrate"],
       "outputs": ["apps/http-backend/dist/**"]
     },
     "ws-backend": {
-      "dependsOn": ["db#migrate"],
+      "dependsOn": ["@repo/db#migrate"],
       "outputs": ["apps/ws-backend/dist/**"]
     },
     "web": {
