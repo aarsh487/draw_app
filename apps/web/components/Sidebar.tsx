@@ -1,6 +1,7 @@
 import { Minus } from "lucide-react";
 import React from "react";
 import { twMerge } from "tailwind-merge";
+import { motion } from 'motion/react';
 
 interface SidebarProps {
   setStrokeStyle: React.Dispatch<React.SetStateAction<string>>;
@@ -22,7 +23,7 @@ export const Sidebar = ({
   ];
 
   return (
-    <div className="hidden md:block fixed top-40 left-4 bg-white shadow-2xl shadow-neutral-600 text-neutral-600 p-8">
+    <motion.div initial={{ opacity: 0, translateX: 10}} animate={{ opacity: 1, translateX: 0 }} transition={{  duration: 0.3 }} className="hidden md:block fixed top-40 left-4 bg-white shadow-2xl shadow-neutral-600 text-neutral-600 p-8">
       <div className="flex flex-col gap-8">
        <div>
        <h1>Stroke</h1>
@@ -88,6 +89,6 @@ export const Sidebar = ({
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };

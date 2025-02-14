@@ -4,6 +4,7 @@ import { Game } from "../draw/Game";
 import { Tool, Topbar } from "./Toolbar";
 import { Sidebar } from "./Sidebar";
 import { deleteAllShapes } from "../draw/http";
+import { twMerge } from "tailwind-merge";
 
 
 export function Canvas({ roomId, socket }: { socket: WebSocket; roomId: string }) {
@@ -55,9 +56,10 @@ export function Canvas({ roomId, socket }: { socket: WebSocket; roomId: string }
         };
     }, [roomId, socket]);
 
+
     return (
-        <div className="h-screen overflow-hidden">
-            <canvas ref={canvasRef}></canvas>
+        <div className={twMerge("h-screen overflow-hidden")}>
+            <canvas className={twMerge(selectedTool === Tool.Hand ? "cursor-grab" : "cursor-crosshair")} ref={canvasRef}></canvas>
             <Topbar setSelectedTool={setSelectedTool} selectedTool={selectedTool} handleDelete={handleDelete} />
             <Sidebar setBgColor={setBgColor} setStrokeStyle={setStrokeStyle} setStrokeWith={setStrokeWith} />
         </div>

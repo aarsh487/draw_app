@@ -7,6 +7,7 @@ import { Input } from '../ui/Input'
 import { Plus, Trash, UsersRound } from 'lucide-react'
 import { createRoom, deleteRoom, getAllRooms } from '../draw/http';
 import { useRouter } from 'next/navigation';
+import { motion } from 'motion/react';
 
 interface RoomType {
     id: string;
@@ -52,7 +53,9 @@ export const CreateRoom = () => {
     <div className="h-100vh bg-gradient-to-tr from-slate-50 to-violet-50">
     <Navbar />
     <div className="pt-30 flex justify-center items-center">
-      <div className="w-[800px] bg-white p-12 flex flex-col gap-8 rounded-xl">
+      <motion.div  initial={{ translateY: 20, opacity: 0 }}
+        animate={{ translateY: 0, opacity: 1 }}
+        transition={{ duration: 0.8 }} className="w-[800px] bg-white p-12 flex flex-col gap-8 rounded-xl">
         <div className="text-black font-semibold text-2xl">
           <h2>Create or Join a Room</h2>
         </div>
@@ -84,8 +87,9 @@ export const CreateRoom = () => {
             ))}
           </div>
         </div>
-      </div>
+      </motion.div>
     </div>
   </div>
   )
 }
+  

@@ -7,6 +7,7 @@ import Link from "next/link";
 import { axiosInstance } from "../../../config";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import { motion } from "motion/react";
 
 function page() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -26,7 +27,7 @@ function page() {
 
       if (result.data.success) {
         router.push("/signin");
-        setForm({ username: "" ,email: "", password: "" });
+        setForm({ username: "", email: "", password: "" });
       } else {
         console.error("Login failed:", result.data.message);
         alert(result.data.message || "Something went wrong. Please try again.");
@@ -47,10 +48,15 @@ function page() {
   }, [form, router]);
   return (
     <div className="h-screen flex flex-col justify-center items-center">
-      <div className="max-h-96 md:w-[450px] bg-white rounded-xl p-10">
+      <motion.div
+        initial={{ translateY: 20, opacity: 0 }}
+        animate={{ translateY: 0, opacity: 1 }}
+        transition={{ duration: 0.8 }}
+        className="max-h-96 md:w-[450px] bg-white rounded-xl p-10"
+      >
         <div className="flex flex-col justify-center items-center gap-1 text-black">
           <h1 className={twMerge("text-2xl font-semibold ")}>
-          Create your account
+            Create your account
           </h1>
           <p className="text-black/90">
             Or{" "}
@@ -60,7 +66,7 @@ function page() {
           </p>
         </div>
         <div className="flex flex-col justify-center items-center gap-4 mt-4">
-        <Input
+          <Input
             onChange={(e) => setForm({ ...form, username: e.target.value })}
             type="text"
             placeholder="Username"
@@ -81,10 +87,10 @@ function page() {
             size="lg"
             variant="primary"
           >
-            sign in
+            Create account
           </Button>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 }

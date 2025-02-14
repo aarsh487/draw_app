@@ -7,6 +7,8 @@ import Link from "next/link";
 import { axiosInstance } from "../../../config";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import { motion } from "motion/react"
+
 
 function page() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -24,7 +26,7 @@ function page() {
       const result = await axiosInstance.post("/signin", form);
 
       if (result.data.success) {
-        router.push("/dashboard");
+        router.push("/create-room");
         setForm({ email: "", password: "" });
         localStorage.setItem('authorization', result.data.token);
       } else {
@@ -47,7 +49,7 @@ function page() {
   }, [form, router]);
   return (
     <div className="h-screen flex flex-col justify-center items-center">
-      <div className="max-h-96 md:w-[450px] bg-white rounded-xl p-10">
+      <motion.div initial={{ translateY: 20, opacity: 0}} animate={{ translateY: 0, opacity: 1}} transition={{ duration: 0.8 }} className="max-h-96 md:w-[450px] bg-white rounded-xl p-10">
         <div className="flex flex-col justify-center items-center gap-1 text-black">
           <h1 className={twMerge("text-2xl font-semibold ")}>
             Sign in to your account
@@ -76,10 +78,10 @@ function page() {
             size="lg"
             variant="primary"
           >
-            Create account
+            Sign in
           </Button>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 }

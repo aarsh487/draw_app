@@ -3,13 +3,13 @@
   "ui": "tui",
   "tasks": {
     "build": {
-      "dependsOn": ["^build"],
+      "dependsOn": ["^build", "db#migrate"],
       "env": [
         "JWT_SECRET",
         "DATABASE_URL"
       ],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": [".next/**", "!.next/cache/**"]
+      "outputs": []
     },
     "lint": {
       "dependsOn": ["^lint"]
@@ -20,6 +20,25 @@
     "dev": {
       "cache": false,
       "persistent": true
+    },
+    "generate": {
+      "cache": false,
+      "outputs": ["packages/db/prisma/generated/**"]
+    },
+    "migrate": {
+      "cache": false,
+      "dependsOn": ["db#generate"]
+    },
+    "http-backend": {
+      "dependsOn": ["db#migrate"],
+      "outputs": ["apps/http-backend/dist/**"]
+    },
+    "ws-backend": {
+      "dependsOn": ["db#migrate"],
+      "outputs": ["apps/ws-backend/dist/**"]
+    },
+    "web": {
+      "outputs": ["apps/web/.next/**", "!apps/web/.next/cache/**"]
     }
   }
 }

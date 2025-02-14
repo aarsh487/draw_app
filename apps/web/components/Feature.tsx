@@ -1,6 +1,8 @@
+"use client";
 import { Pencil, Share2, Users } from "lucide-react";
 import React from "react";
 import { Card } from "../ui/Card";
+import { motion } from "motion/react"
 
 export const Feature = () => {
   const cardItems = [
@@ -26,13 +28,15 @@ export const Feature = () => {
   return (
     <section className="py-30">
       <div className="container mx-auto">
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 items-center gap-8 px-25 lg:px-50">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 justify-items-center md:px-20 lg:px-72 gap-8">
             {cardItems.map((item) => (
-                <Card key={item.title} title={item.title} content={item.content} icon={item.icon} />
+              <motion.div whileHover={{ translateY: -10}} key={item.title} >
+                <Card title={item.title} content={item.content} icon={item.icon} />
+              </motion.div>
             ))}
         </div>
       </div>
     </section>
-  );
+  );  
 };
  

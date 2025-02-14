@@ -47,7 +47,7 @@ export class Game {
   private roomId: string;
   private offSetX = 0;
   private offSetY = 0;
-  private isPanning = false;
+  public isPanning = false;
   private panStartX = 0;
   private panStartY = 0;
   private scale = 1;

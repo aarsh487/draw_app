@@ -33,7 +33,7 @@ export const Card = ({
         <div className="text-black/80 text-xl font-semibold">
           <h1>{title}</h1>
         </div>
-        <div className="text-neutral-500 lg:text-base text-sm">
+        <div className="text-neutral-500 lg:text-sm text-xs">
           <p>{content}</p>
         </div>
       </div>
