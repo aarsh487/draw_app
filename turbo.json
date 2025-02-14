@@ -27,7 +27,8 @@
     },
     "@repo/db#migrate": {
       "cache": false,
-      "dependsOn": ["@repo/db#generate"]
+      "dependsOn": ["@repo/db#generate"],
+      "outputs": ["packages/db/prisma/migrations/**"]
     },
     "http-backend": {
       "dependsOn": ["@repo/db#migrate"],
